@@ -25,7 +25,6 @@
 - Thư viện SDL2: [LazyFoo](https://lazyfoo.net/tutorials/SDL/index.php), Bài giảng của cô Châu.
 - OOP: Giáo trình OOP của ĐHQGHN.
 - Cách vận dụng: 
-  - [Channel PolyMars](https://www.youtube.com/channel/UCl7dSJloxuCa9IBFml7sakw)
   - [Channel Phát triển phần mềm](https://www.youtube.com/@PhatTrienPhanMem123AZ)
 - Hình ảnh: PolyMars & Tự phát triển
 - Âm thanh: Google
