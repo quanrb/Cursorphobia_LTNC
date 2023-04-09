@@ -83,7 +83,7 @@ void RenderWindow::render(SDL_Texture* p_tex)
 void RenderWindow::render(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor) 
 {
 		SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, p_text, textColor); 
-		SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+		SDL_Texture* dMessage = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
 		SDL_Rect src;
 		src.x = 0;
@@ -97,14 +97,14 @@ void RenderWindow::render(float p_x, float p_y, const char* p_text, TTF_Font* fo
 		dst.w = src.w;
 		dst.h = src.h;
 
-		SDL_RenderCopy(renderer, message, &src, &dst);
+		SDL_RenderCopy(renderer, dMessage, &src, &dst);
 		SDL_FreeSurface(surfaceMessage);
 }
 
 void RenderWindow::renderCenter(float p_x, float p_y, const char* p_text, TTF_Font* font, SDL_Color textColor)
 {
 		SDL_Surface* surfaceMessage = TTF_RenderText_Blended( font, p_text, textColor);
-		SDL_Texture* message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+		SDL_Texture* dMessage = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
 		SDL_Rect src;
 		src.x = 0;
@@ -118,7 +118,7 @@ void RenderWindow::renderCenter(float p_x, float p_y, const char* p_text, TTF_Fo
 		dst.w = src.w;
 		dst.h = src.h;
 
-		SDL_RenderCopy(renderer, message, &src, &dst);
+		SDL_RenderCopy(renderer, dMessage, &src, &dst);
 		SDL_FreeSurface(surfaceMessage);
 }
 

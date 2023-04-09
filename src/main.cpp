@@ -146,10 +146,9 @@ void gameLoop()
 		else 
 		{
 			window.clear();
-
 			window.render(SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 94 - 30, logo);
 			window.renderCenter(0, 90 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
-			
+		    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
 			for (int i = 0; i < ground.getLength(); i++)
 			{
 				window.render(ground.getTile(i));
@@ -168,7 +167,8 @@ void gameLoop()
 		{
 			player.update(ground);
 		}
-		else if (!playedDeathSFX) {
+		else if (!playedDeathSFX) 
+		{
 			if (player.isDead() == CURSOR_DEATH)
 			{
 				Mix_PlayChannel(-1, hitSfx, 0);
@@ -187,11 +187,12 @@ void gameLoop()
 		{
 			window.render(ground.getTile(i));
 		}
+	    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
 		window.render(25, 30, arrow);
-		window.render(62, 20, player.getScore(), font32_outline, black);
-		window.render(65, 23, player.getScore(), font32, white);
-		window.render(0, 65, highscoreBox);
-		window.render(65, 64, player.getHighscore(), font16, white);
+        window.render(62, 20, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32_outline, black);
+        window.render(65, 23, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32, white);
+        window.render(0, 65, highscoreBox);
+        window.render(65, 64, ("BEST: " + std::to_string(player.getHighscoreInt())).c_str(), font16, white);
 
 		if (player.isDead() != ALIVE)
 		{
@@ -217,7 +218,22 @@ int main(int argc, char* args[])
 	while (gameRunning) 
 	{
     	gameLoop();
-    	SDL_Delay(16);
+    	if (player.getScoreInt() < 25)
+		{
+			SDL_Delay(15);
+		}
+		else if (player.getScoreInt() < 50) 
+		{
+			SDL_Delay(13);
+		}
+		else if(player.getScoreInt() < 100)
+		{
+			SDL_Delay(11);
+		}
+		else 
+		{
+			SDL_Delay(9);
+		}
 	}
 
 	window.cleanUp();

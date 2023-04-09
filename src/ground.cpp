@@ -1,9 +1,6 @@
-#include <SDL.h>
-#include <SDL_image.h>
 #include <vector>
 #include <iostream>
 #include <stdlib.h>
-
 #include "ground.h"
 #include "groundtile.h"
 using namespace std;
@@ -41,25 +38,26 @@ bool Ground::isTileBelow(float x, int width)
 {
 	for (int i = 0; i < getLength(); i++)
 	{
-		switch (getStatus(i)) {
-		case 0:
-			if (x + width > groundTiles[i].getX() + 24 && x < groundTiles[i].getX() + 64)
-			{
-				return true;
-			}
-			break;
-		case 1:
-			if (x + width > groundTiles[i].getX() && x < groundTiles[i].getX() + 64)
-			{
-				return true;
-			}
-			break;
-		case 2:
-			if (x + width > groundTiles[i].getX() && x < groundTiles[i].getX() + 40)
-			{
-				return true;
-			}
-			break;
+		switch (getStatus(i)) 
+		{
+			case 0:
+				if (x + width > groundTiles[i].getX() + 24 && x < groundTiles[i].getX() + 64)
+				{
+					return true;
+				}
+				break;
+			case 1:
+				if (x + width > groundTiles[i].getX() && x < groundTiles[i].getX() + 64)
+				{
+					return true;
+				}
+				break;
+			case 2:
+				if (x + width > groundTiles[i].getX() && x < groundTiles[i].getX() + 40)
+				{
+					return true;
+				}
+				break;
 		}
 	} 
 	return false;
@@ -86,49 +84,51 @@ void Ground::update(int score)
 		if (groundTiles[i].getX() + 64 < 0)
 		{
 			groundTiles[i].setX(64 * (getLength() - 1) - 1);
-			switch (lastStatus) {
-			case 0:
+			switch (lastStatus) 
 			{
-				groundTiles[i].setStatus(1, groundTex);
-				lastStatus = 1;
-				holeCount = 0;
-				break;
-			} 
-			case 1:
-			{
-				int randomInt = rand()%2 + 1;
-				groundTiles[i].setStatus(randomInt, groundTex);
-				lastStatus = randomInt;
-				holeCount = 0;
-				break;
-			} 
-			case 2:
-			{
-				groundTiles[i].setStatus(3, groundTex);
-				lastStatus = 3;
-				holeCount = 0;
-				break;
-			} 
-			case 3:
-			{
-				int randomInt = rand()%2;
-				if (randomInt == 1)
+				case 0:
 				{
-					randomInt = 3;
-					holeCount++;
-				}
-				else {
+					groundTiles[i].setStatus(1, groundTex);
+					lastStatus = 1;
 					holeCount = 0;
-				}
-				if ((holeCount > 4 && score > 99) || (holeCount > 3 && score < 100))
+					break;
+				} 
+				case 1:
 				{
-					randomInt = 0;
+					int randomInt = rand()%2 + 1;
+					groundTiles[i].setStatus(randomInt, groundTex);
+					lastStatus = randomInt;
 					holeCount = 0;
+					break;
+				} 
+				case 2:
+				{
+					groundTiles[i].setStatus(3, groundTex);
+					lastStatus = 3;
+					holeCount = 0;
+					break;
+				} 
+				case 3:
+				{
+					int randomInt = rand()%2;
+					if (randomInt == 1)
+					{
+						randomInt = 3;
+						holeCount++;
+					}
+					else 
+					{
+						holeCount = 0;
+					}
+					if ((holeCount > 4 && score > 99) || (holeCount > 3 && score < 100))
+					{
+						randomInt = 0;
+						holeCount = 0;
+					}
+					groundTiles[i].setStatus(randomInt, groundTex);
+					lastStatus = randomInt;
+					break;
 				}
-				groundTiles[i].setStatus(randomInt, groundTex);
-				lastStatus = randomInt;
-				break;
-			}
 			}
 		}
 	}

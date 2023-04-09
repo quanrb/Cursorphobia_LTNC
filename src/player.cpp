@@ -115,23 +115,14 @@ void Player::update(Ground& ground)
 	
 }
 
-const char* Player::getScore()
-{
-	string s = to_string(score);
-	s = "SCORE: " + s;
-	return s.c_str();
-}
-
-const char* Player::getHighscore()
-{
-	string s = to_string(highscore);
-	s = "BEST: " + s;
-	return s.c_str();
-}
-
 int Player::getScoreInt()
 {
 	return score;
+}
+
+int Player::getHighscoreInt()
+{
+	return highscore;
 }
 
 int Player::isDead()
