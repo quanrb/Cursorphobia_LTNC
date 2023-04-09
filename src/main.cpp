@@ -58,17 +58,14 @@ bool init()
 	playerTex.push_back(window.loadTexture("res/textures/player/player_2.png"));
 	playerTex.push_back(window.loadTexture("res/textures/player/player_3.png"));
 	playerTex.push_back(window.loadTexture("res/textures/player/player_4.png"));
-
 	groundTex[0] = window.loadTexture("res/textures/ground/left.png");
 	groundTex[1] = window.loadTexture("res/textures/ground/center.png");
 	groundTex[2] = window.loadTexture("res/textures/ground/right.png");
 	groundTex[3] = window.loadTexture("res/textures/ground/hole.png");
-
 	arrow = window.loadTexture("res/textures/arrow.png");
 	highscoreBox = window.loadTexture("res/textures/highscore_box.png");
 	deathOverlay = window.loadTexture("res/textures/death_overlay.png");
 	logo = window.loadTexture("res/textures/logo.png");
-
 	font32 = TTF_OpenFont("res/fonts/cocogoose.ttf", 32);
 	font32_outline = TTF_OpenFont("res/fonts/cocogoose.ttf", 32);
 	font24 = TTF_OpenFont("res/fonts/cocogoose.ttf", 24);
@@ -117,14 +114,14 @@ void gameLoop()
     		}
     		else 
     		{
-    			if (event.button.button == SDL_BUTTON_LEFT && player.isDead() == ALIVE)
+    			if (event.button.button == SDL_BUTTON_LEFT && player.checkDead() == ALIVE)
     			{
 					if (player.jump())
 					{
 						Mix_PlayChannel(-1, jumpSfx, 0);
 					}
 				} 
-				else if (player.isDead() != ALIVE)
+				else if (player.checkDead() != ALIVE)
 				{
 					Mix_PlayChannel(-1, clickSfx, 0);
 					reset();
@@ -140,14 +137,13 @@ void gameLoop()
 		if (SDL_GetTicks() < 1500)
 		{
 			window.clear();
-			window.renderCenter(0, sin(SDL_GetTicks()/100) * 2 - 4, "LTNC", font24, white);
+			window.renderCenter(0, sin(SDL_GetTicks()/100)*2 - 4, "LTNC", font24, white);
 			window.display();
 		}
-		else 
-		{
+		else {
 			window.clear();
-			window.render(SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 94 - 30, logo);
-			window.renderCenter(0, 90 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
+			window.render( SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 94 - 30, logo);
+			window.renderCenter( 0, 90 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
 		    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
 			for (int i = 0; i < ground.getLength(); i++)
 			{
@@ -158,22 +154,22 @@ void gameLoop()
 	}
 	else
 	{
-		if (player.isDead() != CURSOR_DEATH)
+		if (player.checkDead() != CURSOR_DEATH)
 		{
 			ground.update(player.getScoreInt());
 		}
 
-		if (player.isDead() == ALIVE)
+		if (player.checkDead() == ALIVE)
 		{
 			player.update(ground);
 		}
 		else if (!playedDeathSFX) 
 		{
-			if (player.isDead() == CURSOR_DEATH)
+			if (player.checkDead() == CURSOR_DEATH)
 			{
 				Mix_PlayChannel(-1, hitSfx, 0);
 			} 
-			else if (player.isDead() == HOLE_DEATH)
+			else if (player.checkDead() == HOLE_DEATH)
 			{
 				Mix_PlayChannel(-1, fallSfx, 0);
 			}
@@ -183,8 +179,7 @@ void gameLoop()
 		window.clear();
 		window.render(player);
 
-		for (int i = 0; i < ground.getLength(); i++)
-		{
+		for (int i = 0; i < ground.getLength(); i++) {
 			window.render(ground.getTile(i));
 		}
 	    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
@@ -194,15 +189,15 @@ void gameLoop()
         window.render(0, 65, highscoreBox);
         window.render(65, 64, ("BEST: " + std::to_string(player.getHighscoreInt())).c_str(), font16, white);
 
-		if (player.isDead() != ALIVE)
+		if (player.checkDead() != ALIVE)
 		{
 			window.render(deathOverlay);
-			if (player.isDead() == CURSOR_DEATH)
+			if (player.checkDead() == CURSOR_DEATH)
 			{
 				window.renderCenter(0, -24, "The cursor is poisonous...", font24, white);
 				window.renderCenter(0, 12, "Still want to beat the cursor? Click to revenge.", font16, white);
 			}
-			else if (player.isDead() == HOLE_DEATH)
+			else if (player.checkDead() == HOLE_DEATH)
 			{
 				window.renderCenter(0, -24, "The hole had its meal...", font24, white);
 				window.renderCenter(0, 12, "The hole could not eat you all? Click to retry.", font16, white);
@@ -230,8 +225,7 @@ int main(int argc, char* args[])
 		{
 			SDL_Delay(11);
 		}
-		else 
-		{
+		else {
 			SDL_Delay(9);
 		}
 	}

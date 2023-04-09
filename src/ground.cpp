@@ -1,5 +1,5 @@
-#include <vector>
 #include <iostream>
+#include <vector>
 #include <stdlib.h>
 #include "ground.h"
 #include "groundtile.h"
@@ -20,7 +20,7 @@ Ground::Ground(SDL_Texture* left, SDL_Texture* center, SDL_Texture* right, SDL_T
 
 GroundTile& Ground::getTile(int p_index)
 {
-	return groundTiles.at(p_index);
+	return groundTiles[p_index];
 }
 
 int Ground::getStatus(int p_index)
@@ -120,7 +120,7 @@ void Ground::update(int score)
 					{
 						holeCount = 0;
 					}
-					if ((holeCount > 4 && score > 99) || (holeCount > 3 && score < 100))
+					if ((holeCount > 4 && score > 89) || (holeCount > 3 && score < 90))
 					{
 						randomInt = 0;
 						holeCount = 0;

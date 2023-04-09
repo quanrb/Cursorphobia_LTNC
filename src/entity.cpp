@@ -1,5 +1,3 @@
-#include <SDL.h>
-#include <SDL_image.h>
 #include <vector>
 
 #include "entity.h"
@@ -10,11 +8,11 @@ Entity::Entity(float p_x, float p_y, vector<SDL_Texture*> p_tex)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;
-	SDL_QueryTexture(p_tex.at(0), NULL, NULL, &currentFrame.w, &currentFrame.h);
+	SDL_QueryTexture(p_tex[0], NULL, NULL, &currentFrame.w, &currentFrame.h);
 	for (int i = 0; i < getSize(); i++)
 	{
-		animOffsetsX.push_back(0);
-		animOffsetsY.push_back(0);
+		animOffsetX.push_back(0);
+		animOffsetY.push_back(0);
 	}
 }
 
@@ -28,9 +26,10 @@ Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex)
 	SDL_QueryTexture(p_tex, NULL, NULL, &currentFrame.w, &currentFrame.h);
 	for (int i = 0; i < getSize(); i++)
 	{
-		animOffsetsX.push_back(0);
-		animOffsetsY.push_back(0);
+		animOffsetX.push_back(0);
+		animOffsetY.push_back(0);
 	}
+
 }
 
 float Entity::getX()
@@ -70,22 +69,22 @@ void Entity::setY(float p_y)
 
 float Entity::getAnimOffsetX(int p_index)
 {
-	return animOffsetsX.at(p_index);
+	return animOffsetX.at(p_index);
 }
 
 float Entity::getAnimOffsetY(int p_index)
 {
-	return animOffsetsY.at(p_index);
+	return animOffsetY.at(p_index);
 }
 
 void Entity::setAnimOffsetX(int p_index, int p_value)
 {
-	animOffsetsX[p_index] = p_value;
+	animOffsetX[p_index] = p_value;
 }
 
 void Entity::setAnimOffsetY(int p_index, int p_value)
 {
-	animOffsetsY[p_index] = p_value;
+	animOffsetY[p_index] = p_value;
 }
 
 SDL_Texture* Entity::getTex(int p_index)
