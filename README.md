@@ -10,7 +10,7 @@
 - Hoàn toàn sử dụng chuột, khi con trỏ chuột ở đủ gần nhân vật, nhân vật sẽ di chuyển và có thể nhảy lên khi ấn chuột.
 - Phần xử lý vật lý cho phép con trỏ càng gần nhân vật thì tốc độ của nhân vật càng nhanh và nhảy cũng sẽ cao hơn.
 ## *Demo Gameplay*
-[YouTube](https://www.youtube.com/@PhatTrienPhanMem123AZ)
+[YouTube](https://www.youtube.com/watch?v=KDwvrNPs01A)
 ## *Các kĩ thuật sử dụng*
 ### *SDL2*
 - Groundtile, render,...
