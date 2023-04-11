@@ -73,10 +73,11 @@ void Player::update(Ground& ground)
 	}
 	else 
 		vX = 0;
+		
 	setX(getX() + vX);
 	setY(getY() + vY);
 
-	if(getY() > SCREEN_HEIGHT) //bugged
+	if(getY() > SCREEN_HEIGHT || getX() + getWidth() <= 0) //bugged
 		dead = HOLE_DEATH;
 
 	if (ground.isTileBelow(getX(), getWidth()))

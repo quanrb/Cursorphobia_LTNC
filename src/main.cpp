@@ -142,9 +142,9 @@ void gameLoop()
 		}
 		else {
 			window.clear();
-			window.render( SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 94 - 30, logo);
+			window.render( SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 90 - 34, logo);
 			window.renderCenter( 0, 90 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
-		    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
+		    window.render(650, sin(SDL_GetTicks()/100) + 25, "22028290", font24, white);
 			for (int i = 0; i < ground.getLength(); i++)
 			{
 				window.render(ground.getTile(i));
@@ -182,7 +182,7 @@ void gameLoop()
 		for (int i = 0; i < ground.getLength(); i++) {
 			window.render(ground.getTile(i));
 		}
-	    window.render(650, sin(SDL_GetTicks()/100) + 20, "22028290", font24, white);
+	    window.render(650, sin(SDL_GetTicks()/100) + 25, "22028290", font24, white);
 		window.render(25, 30, arrow);
         window.render(62, 20, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32_outline, black);
         window.render(65, 23, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32, white);
