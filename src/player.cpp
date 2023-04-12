@@ -13,6 +13,7 @@ const int SCREEN_HEIGHT = 480;
 const int ALIVE = 0;
 const int CURSOR_DEATH = 1;
 const int HOLE_DEATH = 2;
+const int FRAME_DEATH = 3;
 
 Player::Player(float p_x, float p_y, vector<SDL_Texture*> p_tex)
 	: Entity{ p_x, p_y, p_tex}
@@ -77,8 +78,11 @@ void Player::update(Ground& ground)
 	setX(getX() + vX);
 	setY(getY() + vY);
 
-	if(getY() > SCREEN_HEIGHT || getX() + getWidth() <= 0) //bugged
+	if(getY() > SCREEN_HEIGHT) //bugged
 		dead = HOLE_DEATH;
+
+	else if (getX() + getWidth() <= 0) 
+		dead = FRAME_DEATH;
 
 	if (ground.isTileBelow(getX(), getWidth()))
 	{
