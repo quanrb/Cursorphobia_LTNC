@@ -55,8 +55,8 @@ void Player::update(Ground& ground)
 	SDL_GetMouseState(&mouseX, &mouseY);
 	setX(getX() - 1); //autoscroll
 	if (distanceFromCursor() < 100) {
-		setAnimOffsetY(3, sin(SDL_GetTicks()/40) * vX - 1);
-		setAnimOffsetY(4, -sin(SDL_GetTicks()/40) * vX -  1);
+		setAnimOffsetY(3, sin(SDL_GetTicks()/40) * vX - 2);
+		setAnimOffsetY(4, -sin(SDL_GetTicks()/40) * vX - 2);
 		if (mouseX < getX())
 		{
 			vX = 1/distanceFromCursor() * 100;

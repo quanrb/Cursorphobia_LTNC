@@ -42,6 +42,7 @@ Mix_Chunk* clickSfx;
 bool gameRunning = true;
 bool playedDeathSFX = false;
 bool mainMenu = true;
+bool instruction = true;
 
 bool init()
 {
@@ -110,10 +111,18 @@ void gameLoop()
     			if (event.button.button == SDL_BUTTON_LEFT && SDL_GetTicks() > 1500)
     			{
     				mainMenu = false;
+					// instruction = false;
     				Mix_PlayChannel(-1, clickSfx, 0);
     			}
     		}
-    		else 
+
+			else if(instruction)
+			{
+    			Mix_PlayChannel(-1, clickSfx, 0);
+				instruction = false;
+			}
+
+    		else
     		{
     			if (event.button.button == SDL_BUTTON_LEFT && player.checkDead() == ALIVE)
     			{
@@ -131,11 +140,27 @@ void gameLoop()
     		}
     		break;
     	}
+		case SDL_KEYDOWN:
+		{
+			if(event.key.keysym.sym == SDLK_i) {
+				if(mainMenu)
+				{
+					mainMenu = false;
+					Mix_PlayChannel(-1, clickSfx, 0);
+				}
+				break;
+			}
+			else if(event.key.keysym.sym == SDLK_ESCAPE)
+			{
+				gameRunning = false;
+				break;
+			}
+		}
     	}
 	}
 	if (mainMenu)
 	{
-		if (SDL_GetTicks() < 1500)
+		if (SDL_GetTicks() < 2000)
 		{
 			window.clear();
 			window.renderCenter(0, sin(SDL_GetTicks()/100)*2 - 4, "LTNC", font24, white);
@@ -144,7 +169,9 @@ void gameLoop()
 		else {
 			window.clear();
 			window.render( SCREEN_WIDTH/2 - 234, SCREEN_HEIGHT/2 - 90 - 34, logo);
-			window.renderCenter( 0, 90 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
+			window.renderCenter( 0, 90 + sin(SDL_GetTicks()/100) * 2, "Press 'i' for instructions, or", font24, white);
+			window.renderCenter( 0, 124 + sin(SDL_GetTicks()/100) * 2, "Click to start", font24, white);
+			window.renderCenter( 0, 154 + sin(SDL_GetTicks()/100) * 2, "(Or press 'ESC' to quit)", font16, white);
 		    window.render(650, sin(SDL_GetTicks()/100) + 25, "22028290", font24, white);
 			for (int i = 0; i < ground.getLength(); i++)
 			{
@@ -153,6 +180,20 @@ void gameLoop()
 			window.display();
 		}
 	}
+
+	else if(instruction)
+	{
+		window.clear();
+		// window.render(deathOverlay);
+		window.renderCenter(0, -64, "Just... use your mouse. There are some ground rules:", font24, white);
+		window.renderCenter(0, -24, "1. You fall, you die.", font24, white);
+		window.renderCenter(0, 16, "2. You land on the trap, you die.", font24, white);
+		window.renderCenter(0, 56, "3. You got touched by the cursor, you die.", font24, white);
+		window.renderCenter(0, 96, "(And I really mean it)", font16, white);
+		window.render(560, 450 + sin(SDL_GetTicks()/100) * 2, "Ready to start? Just click.", font16, white);
+		window.display();
+	}
+
 	else
 	{
 		if (player.checkDead() != CURSOR_DEATH)
@@ -196,7 +237,7 @@ void gameLoop()
 			if (player.checkDead() == CURSOR_DEATH)
 			{
 				window.renderCenter(0, -24, "The cursor is poisonous...", font24, white);
-				window.renderCenter(0, 12, "Still want to beat the cursor? Click to revenge.", font16, white);
+				window.renderCenter(0, 12, "Still want to beat it? Click to revenge.", font16, white);
 			}
 			else if(player.checkDead() == FRAME_DEATH) 
 			{
