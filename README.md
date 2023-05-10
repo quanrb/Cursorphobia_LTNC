@@ -10,7 +10,8 @@
 ## *Cách chơi*
 - Hoàn toàn sử dụng chuột, khi con trỏ chuột ở đủ gần nhân vật, nhân vật sẽ di chuyển và có thể nhảy lên khi ấn chuột.
 - Phần xử lý vật lý cho phép con trỏ càng gần nhân vật thì tốc độ của nhân vật càng nhanh và nhảy cũng sẽ cao hơn.
-## *Demo Gameplay*
+- Khi nhân vật "chạm" phải bẫy gai, nhân vật cũng sẽ tèo.
+## *Gameplay*
 ### [YouTube](https://www.youtube.com/watch?v=KDwvrNPs01A)
 ![image](https://user-images.githubusercontent.com/124875538/230760624-adf7c9d2-b760-43de-89a3-1389718bd1a6.png)
 ![image](https://user-images.githubusercontent.com/124875538/230760649-c6fb6298-cfd8-4f05-ac02-7141e0c7e185.png)
