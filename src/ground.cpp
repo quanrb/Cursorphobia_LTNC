@@ -92,7 +92,6 @@ void Ground::reset()
 }
 
 
-//responding new random groundTile
 void Ground::update(int score)
 {
 	for (int i = 0; i < getLength(); i++)

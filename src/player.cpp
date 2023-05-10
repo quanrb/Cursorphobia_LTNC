@@ -68,29 +68,24 @@ void Player::eyes()
 
 void Player::getscoreInt(int score)
 {
-	ofstream outFile("src/highScore.txt");
-	if(highscore < score)
+	ofstream outFile("res/highScore.txt", ios::app);
+	outFile << score << endl;
+	ifstream inFile("res/highScore.txt");
+	vector<int> Scores;
+	while(!inFile.eof())
 	{
-		outFile << score;
-		highscore = score;
+		int getScore;
+		inFile >> getScore;
+		Scores.push_back(getScore);
 	}
-	// ifstream inFile("src/highScore.txt");
-	// vector<int> Scores;
-	// while(!inFile.eof())
-	// {
-	// 	int getScore;
-	// 	inFile >> getScore;
-	// }
-	
+	sort(Scores.begin(), Scores.end(), greater<int>());
+	highscore = Scores[0];
 }
 
 void Player::update(Ground& ground)
 {
 	timer++;
 	score = timer/50; 
-	// if (score > highscore) {
-	// 	highscore = score;
-	// }
 	getscoreInt(score);
 	int mouseX = 0;
 	int mouseY = 0;
@@ -178,10 +173,7 @@ int Player::getScoreInt()
 
 int Player::getHighscoreInt()
 {
-	ifstream inFile ("src/highScore.txt");
-	int highScore;
-	inFile >> highScore;
-	return highScore;
+	return highscore;
 }
 
 int Player::checkDead()
