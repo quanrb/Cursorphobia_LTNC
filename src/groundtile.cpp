@@ -14,7 +14,7 @@ int GroundTile::getStatus()
 	return status;
 }
 
-void GroundTile::setStatus(int p_status, SDL_Texture* groundTex[4])
+void GroundTile::setStatus(int p_status, SDL_Texture* groundTex[5])
 {
 	status = p_status;
 	setTex(groundTex[status]);

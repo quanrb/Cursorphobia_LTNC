@@ -5,12 +5,15 @@
 #include "groundtile.h"
 using namespace std;
 
-Ground::Ground(SDL_Texture* left, SDL_Texture* center, SDL_Texture* right, SDL_Texture* hole)
+const int SCREEN_HEIGHT = 480;
+
+Ground::Ground(SDL_Texture* left, SDL_Texture* center, SDL_Texture* trap, SDL_Texture* right, SDL_Texture* hole)
 {
 	groundTex[0] = left;
 	groundTex[1] = center;
-	groundTex[2] = right;
-	groundTex[3] = hole;
+	groundTex[2] = trap;
+	groundTex[3] = right;
+	groundTex[4] = hole;
 
 	for (int i = 0; i < 14; i++)
 	{
@@ -33,7 +36,6 @@ int Ground::getLength()
 	return groundTiles.size();
 }
 
-//ground Collision
 bool Ground::isTileBelow(float x, int width)
 {
 	for (int i = 0; i < getLength(); i++)
@@ -52,7 +54,7 @@ bool Ground::isTileBelow(float x, int width)
 					return true;
 				}
 				break;
-			case 2:
+			case 3:
 				if (x + width > groundTiles[i].getX() && x < groundTiles[i].getX() + 40)
 				{
 					return true;
@@ -62,6 +64,21 @@ bool Ground::isTileBelow(float x, int width)
 	} 
 	return false;
 }
+
+bool Ground::fallBelow(float y, int height)
+{
+	for(int i = 0; i < getLength(); i++)
+	{
+		switch(getStatus(i)) 
+		{
+			case 2:
+				if (y + height > groundTiles[i].getX() && y < groundTiles[i].getX() + 64)
+					return true;
+		}
+	}
+	return false;
+}
+
 
 void Ground::reset()
 {
@@ -95,7 +112,7 @@ void Ground::update(int score)
 				} 
 				case 1:
 				{
-					int randomInt = rand()%2 + 1;
+					int randomInt = rand()%3 + 1;
 					groundTiles[i].setStatus(randomInt, groundTex);
 					lastStatus = randomInt;
 					holeCount = 0;
@@ -103,24 +120,46 @@ void Ground::update(int score)
 				} 
 				case 2:
 				{
-					groundTiles[i].setStatus(3, groundTex);
-					lastStatus = 3;
+					int randomInt = rand()%3 + 1;
 					holeCount = 0;
+					if(randomInt != 1) 
+					{
+						randomInt = 2;
+						trapCount++;
+					}
+					else 
+					{
+						trapCount = 0;
+					}
+					if (trapCount > 2)
+					{
+						randomInt = 1;
+						trapCount = 0;
+					}
+					groundTiles[i].setStatus(randomInt, groundTex);
+					lastStatus = randomInt;
 					break;
 				} 
 				case 3:
 				{
-					int randomInt = rand()%2;
-					if (randomInt == 1)
+					groundTiles[i].setStatus(4, groundTex);
+					lastStatus = 4;
+					holeCount = 0;
+					break;
+				}
+				case 4:
+				{
+					int randomInt = rand()%3;
+					if (randomInt == 1 || randomInt == 2)
 					{
-						randomInt = 3;
+						randomInt = 4;
 						holeCount++;
 					}
 					else 
 					{
 						holeCount = 0;
 					}
-					if ((holeCount > 4 && score > 89) || (holeCount > 3 && score < 90))
+					if ((holeCount > 3 && score > 89) || (holeCount > 2 && score < 90))
 					{
 						randomInt = 0;
 						holeCount = 0;

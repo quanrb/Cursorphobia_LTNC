@@ -1,4 +1,7 @@
-#include <iostream>
+#include <bits/stdc++.h>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
 #include <cmath>
 #include <vector>
 #include <string>
@@ -14,6 +17,7 @@ const int ALIVE = 0;
 const int CURSOR_DEATH = 1;
 const int HOLE_DEATH = 2;
 const int FRAME_DEATH = 3;
+const int TRAP_DEATH = 4;
 
 Player::Player(float p_x, float p_y, vector<SDL_Texture*> p_tex)
 	: Entity{ p_x, p_y, p_tex}
@@ -43,17 +47,58 @@ bool Player::jump()
 	return false;
 }
 
+float Player::clamp(float value, float p_min, float p_max)
+{
+	if (value > p_max)
+		return p_max;
+	if (value < p_min)
+		return p_min;
+	return value;
+}
+
+void Player::eyes()
+{
+	int mouseX = 0;
+	int mouseY = 0;
+	SDL_GetMouseState(&mouseX, &mouseY);
+
+	setAnimOffsetX(0, clamp(mouseX - getX() - getWidth()/2, -2, 2));
+	setAnimOffsetY(0, clamp(mouseY - getY() - getHeight()/2 + 15, -2, 2));
+}
+
+void Player::getscoreInt(int score)
+{
+	ofstream outFile("src/highScore.txt");
+	if(highscore < score)
+	{
+		outFile << score;
+		highscore = score;
+	}
+	// ifstream inFile("src/highScore.txt");
+	// vector<int> Scores;
+	// while(!inFile.eof())
+	// {
+	// 	int getScore;
+	// 	inFile >> getScore;
+	// }
+	
+}
+
 void Player::update(Ground& ground)
 {
 	timer++;
 	score = timer/50; 
-	if (score > highscore) {
-		highscore = score;
-	}
+	// if (score > highscore) {
+	// 	highscore = score;
+	// }
+	getscoreInt(score);
 	int mouseX = 0;
 	int mouseY = 0;
 	SDL_GetMouseState(&mouseX, &mouseY);
-	setX(getX() - 1); //autoscroll
+	setX(getX() - 1);
+
+	eyes();
+
 	if (distanceFromCursor() < 100) {
 		setAnimOffsetY(3, sin(SDL_GetTicks()/40) * vX - 2);
 		setAnimOffsetY(4, -sin(SDL_GetTicks()/40) * vX - 2);
@@ -68,7 +113,7 @@ void Player::update(Ground& ground)
 		else {
 			vX = 0;
 			if (mouseY > getY() && mouseY < getY() + getHeight()) {
-				dead = CURSOR_DEATH; // dead = 1
+				dead = CURSOR_DEATH;
 			}
 		}
 	}
@@ -78,7 +123,7 @@ void Player::update(Ground& ground)
 	setX(getX() + vX);
 	setY(getY() + vY);
 
-	if(getY() > SCREEN_HEIGHT) //bugged
+	if(getY() > SCREEN_HEIGHT)
 		dead = HOLE_DEATH;
 
 	else if (getX() + getWidth() <= 0) 
@@ -86,25 +131,42 @@ void Player::update(Ground& ground)
 
 	if (ground.isTileBelow(getX(), getWidth()))
 	{
-		if (getY() + getHeight() < SCREEN_HEIGHT - 64)
+		if (getY() + getHeight() < SCREEN_HEIGHT - 55)
 		{
 			vY += GRAVITY;
 			grounded = false;
 		}
 		else 
 		{
-			setY(SCREEN_HEIGHT - getHeight() - 64);
+			setY(SCREEN_HEIGHT - getHeight() - 55);
 			grounded = true;
 		}
 	}
-	else //hole
+
+	else 
 	{
+		if (ground.fallBelow(getX(), getWidth()))
+		{
+			if(getY() + getHeight() >= SCREEN_HEIGHT - 64)
+			{
+				dead = TRAP_DEATH;
+			}
+			else
+			{
+				vY += GRAVITY;
+				grounded = false;
+			}
+		}
+		else
+		{
 			vY += GRAVITY;
 			grounded = false;
 			if (getY() > SCREEN_HEIGHT)
 			{
-				dead = HOLE_DEATH; //2
+				dead = HOLE_DEATH;
 			}
+		}
+
 	}
 	
 }
@@ -116,7 +178,10 @@ int Player::getScoreInt()
 
 int Player::getHighscoreInt()
 {
-	return highscore;
+	ifstream inFile ("src/highScore.txt");
+	int highScore;
+	inFile >> highScore;
+	return highScore;
 }
 
 int Player::checkDead()
@@ -127,7 +192,7 @@ int Player::checkDead()
 void Player::reset()
 {
 	setX(SCREEN_WIDTH/2 - getWidth()/2);
-	setY(SCREEN_HEIGHT - getHeight() - 64);
+	setY(SCREEN_HEIGHT - getHeight() - 55);
 	score = 0;
 	timer = 0;
 	vX = 0;

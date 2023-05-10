@@ -19,11 +19,12 @@ const int ALIVE = 0;
 const int CURSOR_DEATH = 1;
 const int HOLE_DEATH = 2;
 const int FRAME_DEATH = 3;
+const int TRAP_DEATH = 4;
 const Uint8 *keyState;
 
 RenderWindow window;
 vector<SDL_Texture*> playerTex; 
-SDL_Texture* groundTex[4];
+SDL_Texture* groundTex[5];
 SDL_Texture* arrow;
 SDL_Texture* highscoreBox;
 SDL_Texture* deathOverlay;
@@ -62,8 +63,9 @@ bool init()
 	playerTex.push_back(window.loadTexture("res/textures/player/player_4.png"));
 	groundTex[0] = window.loadTexture("res/textures/ground/left.png");
 	groundTex[1] = window.loadTexture("res/textures/ground/center.png");
-	groundTex[2] = window.loadTexture("res/textures/ground/right.png");
-	groundTex[3] = window.loadTexture("res/textures/ground/hole.png");
+	groundTex[2] = window.loadTexture("res/textures/ground/trap.png");
+	groundTex[3] = window.loadTexture("res/textures/ground/right.png");
+	groundTex[4] = window.loadTexture("res/textures/ground/hole.png");
 	arrow = window.loadTexture("res/textures/arrow.png");
 	highscoreBox = window.loadTexture("res/textures/highscore_box.png");
 	deathOverlay = window.loadTexture("res/textures/death_overlay.png");
@@ -85,7 +87,7 @@ bool init()
 
 bool load = init();
 Player player(0, 0, playerTex);
-Ground ground(groundTex[0], groundTex[1], groundTex[2], groundTex[3]);
+Ground ground(groundTex[0], groundTex[1], groundTex[2], groundTex[3], groundTex[4]);
 
 void reset()
 {
@@ -111,7 +113,7 @@ void gameLoop()
     			if (event.button.button == SDL_BUTTON_LEFT && SDL_GetTicks() > 1500)
     			{
     				mainMenu = false;
-					// instruction = false;
+					instruction = false;
     				Mix_PlayChannel(-1, clickSfx, 0);
     			}
     		}
@@ -142,7 +144,8 @@ void gameLoop()
     	}
 		case SDL_KEYDOWN:
 		{
-			if(event.key.keysym.sym == SDLK_i) {
+			if(event.key.keysym.sym == SDLK_i) 
+			{
 				if(mainMenu)
 				{
 					mainMenu = false;
@@ -196,7 +199,7 @@ void gameLoop()
 
 	else
 	{
-		if (player.checkDead() != CURSOR_DEATH)
+		if (player.checkDead() != CURSOR_DEATH && player.checkDead() != TRAP_DEATH)
 		{
 			ground.update(player.getScoreInt());
 		}
@@ -207,7 +210,7 @@ void gameLoop()
 		}
 		else if (!playedDeathSFX) 
 		{
-			if (player.checkDead() == CURSOR_DEATH)
+			if (player.checkDead() == CURSOR_DEATH  || player.checkDead() == TRAP_DEATH)
 			{
 				Mix_PlayChannel(-1, hitSfx, 0);
 			} 
@@ -226,10 +229,10 @@ void gameLoop()
 		}
 	    window.render(650, sin(SDL_GetTicks()/100) + 25, "22028290", font24, white);
 		window.render(25, 30, arrow);
-        window.render(62, 20, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32_outline, black);
-        window.render(65, 23, ("SCORE: " + std::to_string(player.getScoreInt())).c_str(), font32, white);
+        window.render(62, 20, ("SCORE: " + to_string(player.getScoreInt())).c_str(), font32_outline, black);
+        window.render(65, 23, ("SCORE: " + to_string(player.getScoreInt())).c_str(), font32, white);
         window.render(0, 65, highscoreBox);
-        window.render(65, 64, ("BEST: " + std::to_string(player.getHighscoreInt())).c_str(), font16, white);
+        window.render(65, 64, ("BEST: " + to_string(player.getHighscoreInt())).c_str(), font16, white);
 
 		if (player.checkDead() != ALIVE)
 		{
@@ -249,7 +252,11 @@ void gameLoop()
 				window.renderCenter(0, -24, "The hole had its meal...", font24, white);
 				window.renderCenter(0, 12, "The hole could not eat you all? Click to retry.", font16, white);
 			}
-
+			else if(player.checkDead() == TRAP_DEATH)
+			{
+				window.renderCenter(0, -24, "I told you...", font24, white);
+				window.renderCenter(0, 12, "The hole could not eat you all? Click to retry.", font16, white);
+			}
 		}
 		window.display();
 	}
@@ -273,7 +280,7 @@ int main(int argc, char* args[])
 			SDL_Delay(11);
 		}
 		else {
-			SDL_Delay(9);
+			SDL_Delay(5);
 		}
 	}
 
